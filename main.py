@@ -15,9 +15,6 @@ HEADERS = {"x-apisports-key": API_KEY}
 
 
 async def fetch_fixtures_by_date(target_date: str) -> list:
-    """
-    Fetch fixtures for the specified date from the API.
-    """
     url = f"{BASE_URL}{FIXTURES_ENDPOINT}?date={target_date}"
 
     async with httpx.AsyncClient() as client:
@@ -39,11 +36,8 @@ async def fetch_fixtures_by_date(target_date: str) -> list:
 
     return fixtures
 
-
+#group fixture by league
 def group_fixtures_by_league(fixtures: list) -> dict:
-    """
-    Group fixtures by league name.
-    """
     grouped = defaultdict(list)
     for match in fixtures:
         grouped[match["league"]].append(match)
@@ -51,9 +45,6 @@ def group_fixtures_by_league(fixtures: list) -> dict:
 
 
 def display_fixtures(fixtures: list, target_date: str) -> None:
-    """
-    Print fixtures grouped by league to the terminal.
-    """
     print(f"\n📅 Fixtures for {target_date}:\n")
 
     if not fixtures:
@@ -66,7 +57,7 @@ def display_fixtures(fixtures: list, target_date: str) -> None:
         print(f"🏆 {league}")
         for match in matches:
             print(f"   - {match['home_team']} vs {match['away_team']} at {match['kickoff']}")
-        print()  # Blank line between leagues
+        print()  #add an empty line between the leagues for better readability
 
 
 async def main():
@@ -75,7 +66,7 @@ async def main():
         fixtures = await fetch_fixtures_by_date(today)
         display_fixtures(fixtures, today)
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
 
 
 if __name__ == "__main__":
